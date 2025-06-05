@@ -1,7 +1,7 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 
-export function Welcome() {
+export function HomePage() {
   return (
     <main className="flex items-center justify-center pt-16 pb-4">
       <div className="flex-1 flex flex-col items-center gap-16 min-h-0">
@@ -10,11 +10,13 @@ export function Welcome() {
             <img
               src={logoLight}
               alt="React Router"
+              data-testid="logo-light"
               className="block w-full dark:hidden"
             />
             <img
               src={logoDark}
               alt="React Router"
+              data-testid="logo-dark"
               className="hidden w-full dark:block"
             />
           </div>
