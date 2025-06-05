@@ -16,7 +16,10 @@
     "rootDirs": [".", "./.react-router/types"],
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
+      "@atoms/*": ["app/shared/ui/atoms/*"],
+      "@molecules/*": ["app/shared/ui/molecules/*"],
+      "@organisms/*": ["app/shared/ui/organisms/*"],
     },
     "esModuleInterop": true,
     "verbatimModuleSyntax": false,

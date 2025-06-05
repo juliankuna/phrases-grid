@@ -15,4 +15,18 @@ export class Phrase {
     const year = this.date.getFullYear()
     return `${day}/${month}/${year}`
   }
+
+  cloneWith(update: Partial<Omit<Phrase, 'getFormattedDate' | 'cloneWith'>>): Phrase {
+    return new Phrase(
+      update.id ?? this.id,
+      update.description ?? this.description,
+      update.date ?? this.date,
+      update.categoryId ?? this.categoryId,
+      update.isFavorite ?? this.isFavorite
+    )
+  }
+
+  toggleFavorite(): Phrase {
+    return this.cloneWith({ isFavorite: !this.isFavorite })
+  }
 }
