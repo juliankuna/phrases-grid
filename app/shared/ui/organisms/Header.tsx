@@ -10,6 +10,10 @@ export default function Header() {
         <CustomLink to="/" currentPath={location.pathname}>
           Frases
         </CustomLink>
+        <p>|</p>
+        <CustomLink to="/categorias" currentPath={location.pathname}>
+          Categorías
+        </CustomLink>
       </nav>
     </header>
   )
