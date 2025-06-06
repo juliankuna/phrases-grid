@@ -7,7 +7,7 @@ export const useUpdatePhrase = () => {
 }
 
 export const useCreatePhrase = () => {
-  return useBatchMutation<Phrase>(PhrasesService.createPhrase);
+  return useBatchMutation<Omit<Phrase, "id">, Phrase>(PhrasesService.createPhrase);
 }
 
 export const useDeletePhrase = () => {

@@ -5,7 +5,12 @@ export function useFilterAndSortPhrases() {
   const phrases = usePhraseStore((state) => state.phrases);
   const { searchText, selectedCategory, sortOrder } = useFiltersStore();
 
-  return phrases
+  const phrasesWithDate = phrases.map((p) => ({
+        ...p,
+        date: new Date(p.date), // Conversión para asegurar que date sea un objeto Date
+      }));
+
+  return phrasesWithDate
     .filter((phrase) => {
       const matchesSearch = phrase.description
         .toLowerCase()

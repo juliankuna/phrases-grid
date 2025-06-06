@@ -84,10 +84,8 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
       description: editedDescription,
       categoryId: Number.parseInt(editedCategoryId),
     });
-
-    setEditingId(null);
-    setEditedDescription("");
-    setEditedCategoryId("");
+    
+    handleCancelEdit();
   };
 
   if (phrases.length === 0) {

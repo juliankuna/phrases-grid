@@ -44,16 +44,15 @@ const DialogNewPhrase: React.FC<DialogNewPhraseProps> = ({
   // Función para agregar una nueva frase en el estado y en el backend
   const addPhrase = async () => {
     if (newPhrase.trim() && newCategoryId) {
-      const phrase: Phrase = {
-        id: Date.now(),
+      const phraseWithoutId: Omit<Phrase, "id"> = {
         description: newPhrase.trim(),
         date: new Date(),
         categoryId: Number.parseInt(newCategoryId),
         isFavorite: false,
       };
 
+      const phrase = await createPhraseMutation.mutateAsync(phraseWithoutId as Phrase);
       setPhrases([...phrases, phrase]);
-      await createPhraseMutation.mutateAsync(phrase);
       
       setNewPhrase("");
       setNewCategoryId("");
