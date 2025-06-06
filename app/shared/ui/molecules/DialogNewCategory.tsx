@@ -12,6 +12,7 @@ import { Input } from "@atoms/input";
 import { Button } from "@atoms/button";
 import { useCategoryStore } from "@store/categoryStore";
 import { Category } from "app/shared/types/Category";
+import { useCreateCategory } from "@hooks/usePersistCategory";
 
 interface DialogNewCategoryProps {
   isDialogOpen: boolean;
@@ -26,13 +27,19 @@ const DialogNewCategory: React.FC<DialogNewCategoryProps> = ({
   const categories = useCategoryStore((state) => state.categories);
   const setCategories = useCategoryStore((state) => state.setCategories);
 
-  const addCategory = () => {
+  // Hook para crear una nueva categoría en el backend
+  const createCategoryMutation = useCreateCategory();
+
+  const addCategory = async () => {
     if (newCategoryName.trim()) {
-      const category: Category = {
-        id: Date.now(),
+      const newCategory: Omit<Category, "id"> = {
         name: newCategoryName.trim(),
       };
+
+      const category = await createCategoryMutation.mutateAsync(newCategory as Category);
+
       setCategories([...categories, category]);
+
       setNewCategoryName("");
       setIsDialogOpen(false);
     }

@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardTitle } from "@atoms/card";
 import { Input } from "@atoms/input";
 import { Pen, Trash2, Check, X } from "lucide-react";
-import EmptyCard from "../molecules/EmptyCard";
+import EmptyCard from "@molecules/EmptyCard";
 import { useCategoryStore } from "@store/categoryStore";
 import { Category } from "app/shared/types/Category";
-import ButtonCard from "../molecules/ButtonCard";
+import ButtonCard from "@molecules/ButtonCard";
+import {
+  useDeleteCategory,
+  useUpdateCategory,
+} from "@hooks/usePersistCategory";
 
 interface CategoriesGridProps {
   filteredCategories: Category[];
@@ -18,11 +22,16 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({
   const updateCategory = useCategoryStore((state) => state.updateCategory);
   const categories = useCategoryStore((state) => state.categories);
 
+  // Mutaciones para actualizar y eliminar frases en el backend usando React Query
+  const updateCategoryMutation = useUpdateCategory();
+  const deleteCategoryMutation = useDeleteCategory();
+
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editedName, setEditedName] = useState("");
 
-  const deleteCategory = (id: number) => {
+  const deleteCategory = async (id: number) => {
     setCategories(categories.filter((category) => category.id !== id));
+    await deleteCategoryMutation.mutateAsync(id);
   };
 
   const handleEdit = (category: Category) => {
@@ -30,10 +39,15 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({
     setEditedName(category.name);
   };
 
-  const handleSave = (category: Category) => {
-    updateCategory({ ...category, name: editedName });
+  const handleCancelEdit = () => {
     setEditingId(null);
     setEditedName("");
+  };
+
+  const handleSave = async (category: Category) => {
+    updateCategory({ ...category, name: editedName });
+    await updateCategoryMutation.mutateAsync({ ...category, name: editedName });
+    handleCancelEdit();
   };
 
   if (filteredCategories.length === 0) {
@@ -74,10 +88,7 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({
                       className="text-destructive"
                       ariaLabel="Cancelar edición"
                       icon={<X className="w-4 h-4" />}
-                      onClick={() => {
-                        setEditingId(null);
-                        setEditedName("");
-                      }}
+                      onClick={handleCancelEdit}
                     />
                   </>
                 ) : (
