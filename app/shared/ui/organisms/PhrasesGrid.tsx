@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@atoms/card";
 import { Badge } from "@atoms/badge";
-import { Heart, Trash2 } from "lucide-react";
+import { Heart, Trash2, Pen, Check, X } from "lucide-react";
 import { HeartFilledIcon } from "@atoms/HeartFilledIcon";
 import { Phrase } from "~/shared/types/Phrase";
 import { usePhraseStore } from "@store/phraseStore";
 import { getFormattedDate } from "~/shared/lib/getFormatedDate";
 import EmptyCard from "@molecules/EmptyCard";
-import { useCategoryStore } from "~/shared/store/categoryStore";
+import { useCategoryStore } from "@store/categoryStore";
 import ButtonCard from "@molecules/ButtonCard";
+import { Textarea } from "@atoms/textarea";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@atoms/select";
 
 interface PhrasesGridProps {
   phrases: Phrase[];
@@ -18,6 +26,10 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
   const setPhrases = usePhraseStore((state) => state.setPhrases);
   const updatePhrase = usePhraseStore((state) => state.updatePhrase);
   const categories = useCategoryStore((state) => state.categories);
+
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editedDescription, setEditedDescription] = useState("");
+  const [editedCategoryId, setEditedCategoryId] = useState<string>("");
 
   const getCategoryName = (categoryId: number): string => {
     return (
@@ -32,6 +44,23 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
 
   const toggleFavorite = (phrase: Phrase) => {
     updatePhrase({ ...phrase, isFavorite: !phrase.isFavorite });
+  };
+
+  const handleEdit = (phrase: Phrase) => {
+    setEditingId(phrase.id);
+    setEditedDescription(phrase.description);
+    setEditedCategoryId(phrase.categoryId.toString());
+  };
+
+  const handleSave = (phrase: Phrase) => {
+    updatePhrase({
+      ...phrase,
+      description: editedDescription,
+      categoryId: Number.parseInt(editedCategoryId),
+    });
+    setEditingId(null);
+    setEditedDescription("");
+    setEditedCategoryId("");
   };
 
   if (phrases.length === 0) {
@@ -50,17 +79,77 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
         >
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between">
-              <Badge variant="secondary" className="mb-2">
-                {getCategoryName(phrase.categoryId)}
-              </Badge>
-              <ButtonCard
-                className="text-destructive"
-                ariaLabel="Eliminar frase"
-                icon={<Trash2 className="w-4 h-4" />}
-                onClick={() => deletePhrase(phrase.id)}
-              />
+              {editingId === phrase.id ? (
+                <Select
+                  value={editedCategoryId}
+                  onValueChange={setEditedCategoryId}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona una categoría" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Badge variant="secondary" className="mb-2">
+                  {getCategoryName(phrase.categoryId)}
+                </Badge>
+              )}
+
+              <div className="flex gap-2">
+                {editingId === phrase.id ? (
+                  <>
+                    <ButtonCard
+                      className="text-green-500"
+                      ariaLabel="Guardar frase"
+                      icon={<Check className="w-4 h-4" />}
+                      onClick={() => handleSave(phrase)}
+                    />
+                    <ButtonCard
+                      className="text-destructive"
+                      ariaLabel="Cancelar edición"
+                      icon={<X className="w-4 h-4" />}
+                      onClick={() => {
+                        setEditingId(null);
+                        setEditedDescription("");
+                        setEditedCategoryId("");
+                      }}
+                    />
+                  </>
+                ) : (
+                  <ButtonCard
+                    className="text-blue-700"
+                    ariaLabel="Editar frase"
+                    icon={<Pen className="w-4 h-4" />}
+                    onClick={() => handleEdit(phrase)}
+                  />
+                )}
+
+                <ButtonCard
+                  className="text-destructive"
+                  ariaLabel="Eliminar frase"
+                  icon={<Trash2 className="w-4 h-4" />}
+                  onClick={() => deletePhrase(phrase.id)}
+                />
+              </div>
             </div>
-            <CardTitle className="text-base">{phrase.description}</CardTitle>
+            {editingId === phrase.id ? (
+              <Textarea
+                value={editedDescription}
+                onChange={(e) => setEditedDescription(e.target.value)}
+                className="mt-1 min-h-[80px]"
+              />
+            ) : (
+              <CardTitle className="text-base">{phrase.description}</CardTitle>
+            )}
           </CardHeader>
           <CardContent className="flex justify-between items-center pt-0">
             <p className="text-sm text-muted-foreground">

@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle } from "@atoms/card";
 import { Input } from "@atoms/input";
-import { Pen, Trash2, Check } from "lucide-react";
+import { Pen, Trash2, Check, X } from "lucide-react";
 import EmptyCard from "../molecules/EmptyCard";
 import { useCategoryStore } from "@store/categoryStore";
 import { Category } from "app/shared/types/Category";
@@ -64,12 +63,23 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({
 
               <div className="flex gap-2">
                 {editingId === category.id ? (
-                  <ButtonCard
-                    className="text-green-500"
-                    ariaLabel="Guardar categoría"
-                    icon={<Check className="w-4 h-4" />}
-                    onClick={() => handleSave(category)}
-                  />
+                  <>
+                    <ButtonCard
+                      className="text-green-500"
+                      ariaLabel="Guardar categoría"
+                      icon={<Check className="w-4 h-4" />}
+                      onClick={() => handleSave(category)}
+                    />
+                    <ButtonCard
+                      className="text-destructive"
+                      ariaLabel="Cancelar edición"
+                      icon={<X className="w-4 h-4" />}
+                      onClick={() => {
+                        setEditingId(null);
+                        setEditedName("");
+                      }}
+                    />
+                  </>
                 ) : (
                   <ButtonCard
                     className="text-blue-700"
