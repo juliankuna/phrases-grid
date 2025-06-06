@@ -1,35 +1,66 @@
 {
   "phrases": [
     {
-      "id": 1,
+      "id": "1",
       "description": "El conocimiento es poder.",
-      "date": "2025-06-05T14:30:00",
+      "date": "2025-06-05T17:30:00.000Z",
       "categoryId": 3,
       "isFavorite": false
     },
     {
-      "id": 2,
+      "id": "2",
       "description": "Hasta la vista, baby.",
       "date": "2025-06-01T09:00:00",
       "categoryId": 5,
       "isFavorite": true
     },
     {
-      "id": 3,
+      "id": "3",
       "description": "Lo esencial es invisible a los ojos.",
       "date": "2025-05-20T18:45:00",
       "categoryId": 6,
       "isFavorite": false
+    },
+    {
+      "id": "1749234430183",
+      "description": "Ser de river",
+      "date": "2025-06-06T18:27:10.183Z",
+      "categoryId": 2,
+      "isFavorite": false
     }
   ],
   "categories": [
-    { "id": 1, "name": "Inspiracional" },
-    { "id": 2, "name": "Tristes" },
-    { "id": 3, "name": "Filosóficas" },
-    { "id": 4, "name": "Citas célebres" },
-    { "id": 5, "name": "Citas de películas" },
-    { "id": 6, "name": "Citas de libros" },
-    { "id": 7, "name": "Citas de canciones" },
-    { "id": 8, "name": "Citas de autores famosos" }
+    {
+      "id": "1",
+      "name": "Inspiracional"
+    },
+    {
+      "id": "2",
+      "name": "Tristes"
+    },
+    {
+      "id": "3",
+      "name": "Filosóficas"
+    },
+    {
+      "id": "4",
+      "name": "Citas célebres"
+    },
+    {
+      "id": "5",
+      "name": "Citas de películas"
+    },
+    {
+      "id": "6",
+      "name": "Citas de libros"
+    },
+    {
+      "id": "7",
+      "name": "Citas de canciones"
+    },
+    {
+      "id": "8",
+      "name": "Citas de autores famosos"
+    }
   ]
 }

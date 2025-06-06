@@ -17,6 +17,10 @@ import {
   SelectContent,
   SelectItem,
 } from "@atoms/select";
+import {
+  useDeletePhrase,
+  useUpdatePhrase,
+} from "@hooks/usePersistPhrase";
 
 interface PhrasesGridProps {
   phrases: Phrase[];
@@ -25,6 +29,11 @@ interface PhrasesGridProps {
 const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
   const setPhrases = usePhraseStore((state) => state.setPhrases);
   const updatePhrase = usePhraseStore((state) => state.updatePhrase);
+
+  // Mutaciones para actualizar y eliminar frases en el backend usando React Query
+  const updatePhraseMutation = useUpdatePhrase();
+  const deletePhraseMutation = useDeletePhrase();
+
   const categories = useCategoryStore((state) => state.categories);
 
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -38,12 +47,17 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
     );
   };
 
-  const deletePhrase = (id: number) => {
+  const deletePhrase = async (id: number) => {
     setPhrases(phrases.filter((phrase) => phrase.id !== id));
+    await deletePhraseMutation.mutateAsync(id);
   };
 
-  const toggleFavorite = (phrase: Phrase) => {
+  const toggleFavorite = async (phrase: Phrase) => {
     updatePhrase({ ...phrase, isFavorite: !phrase.isFavorite });
+    await updatePhraseMutation.mutateAsync({
+      ...phrase,
+      isFavorite: !phrase.isFavorite,
+    });
   };
 
   const handleEdit = (phrase: Phrase) => {
@@ -52,12 +66,25 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
     setEditedCategoryId(phrase.categoryId.toString());
   };
 
-  const handleSave = (phrase: Phrase) => {
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditedDescription("");
+    setEditedCategoryId("");
+  };
+
+  const handleSave = async (phrase: Phrase) => {
     updatePhrase({
       ...phrase,
       description: editedDescription,
       categoryId: Number.parseInt(editedCategoryId),
     });
+
+    await updatePhraseMutation.mutateAsync({
+      ...phrase,
+      description: editedDescription,
+      categoryId: Number.parseInt(editedCategoryId),
+    });
+
     setEditingId(null);
     setEditedDescription("");
     setEditedCategoryId("");
@@ -117,11 +144,7 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
                       className="text-destructive"
                       ariaLabel="Cancelar edición"
                       icon={<X className="w-4 h-4" />}
-                      onClick={() => {
-                        setEditingId(null);
-                        setEditedDescription("");
-                        setEditedCategoryId("");
-                      }}
+                      onClick={handleCancelEdit}
                     />
                   </>
                 ) : (

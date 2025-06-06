@@ -20,7 +20,8 @@ import { Button } from "@atoms/button";
 import { Phrase } from "~/shared/types/Phrase";
 import { usePhraseStore } from "@store/phraseStore";
 import { useCategoryStore } from "@store/categoryStore";
-
+import { useCreatePhrase } from "~/shared/hooks/usePersistPhrase";
+import Loading from "../atoms/loading";
 
 interface DialogNewPhraseProps {
   isDialogOpen: boolean;
@@ -36,23 +37,30 @@ const DialogNewPhrase: React.FC<DialogNewPhraseProps> = ({
   const phrases = usePhraseStore((state) => state.phrases);
   const setPhrases = usePhraseStore((state) => state.setPhrases);
   const categories = useCategoryStore((state) => state.categories);
+  
+  // Hook para crear una nueva frase en el backend
+  const createPhraseMutation = useCreatePhrase();
 
-    // Función para agregar nueva frase
-    const addPhrase = () => {
-      if (newPhrase.trim() && newCategoryId) {
-        const phrase: Phrase = {
-          id: Date.now(), // ID único basado en timestamp
-          description: newPhrase.trim(),
-          date: new Date(),
-          categoryId: Number.parseInt(newCategoryId),
-          isFavorite: false,
-        };
-        setPhrases([...phrases, phrase]);
-        setNewPhrase("");
-        setNewCategoryId("");
-        setIsDialogOpen(false);
-      }
-    };
+  // Función para agregar una nueva frase en el estado y en el backend
+  const addPhrase = async () => {
+    if (newPhrase.trim() && newCategoryId) {
+      const phrase: Phrase = {
+        id: Date.now(),
+        description: newPhrase.trim(),
+        date: new Date(),
+        categoryId: Number.parseInt(newCategoryId),
+        isFavorite: false,
+      };
+
+      setPhrases([...phrases, phrase]);
+      await createPhraseMutation.mutateAsync(phrase);
+      
+      setNewPhrase("");
+      setNewCategoryId("");
+      setIsDialogOpen(false);
+    }
+  };
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogContent className="sm:max-w-[425px]">
@@ -95,7 +103,7 @@ const DialogNewPhrase: React.FC<DialogNewPhraseProps> = ({
             onClick={addPhrase}
             disabled={!newPhrase.trim() || !newCategoryId}
           >
-            Agregar frase
+            {createPhraseMutation.isPending ? <Loading color="white" /> : <>Agregar frase</>}
           </Button>
         </DialogFooter>
       </DialogContent>
