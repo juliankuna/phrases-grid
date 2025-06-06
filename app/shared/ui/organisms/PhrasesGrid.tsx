@@ -1,22 +1,20 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@atoms/card";
 import { Badge } from "@atoms/badge";
-import { Button } from "@atoms/button";
 import { Heart, Trash2 } from "lucide-react";
 import { HeartFilledIcon } from "@atoms/HeartFilledIcon";
 import { Phrase } from "~/shared/types/Phrase";
 import { usePhraseStore } from "@store/phraseStore";
 import { getFormattedDate } from "~/shared/lib/getFormatedDate";
-import EmptyCard from "../molecules/EmptyCard";
+import EmptyCard from "@molecules/EmptyCard";
 import { useCategoryStore } from "~/shared/store/categoryStore";
+import ButtonCard from "@molecules/ButtonCard";
 
 interface PhrasesGridProps {
   phrases: Phrase[];
 }
 
-const PhrasesGrid: React.FC<PhrasesGridProps> = ({
-  phrases,
-}) => {
+const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
   const setPhrases = usePhraseStore((state) => state.setPhrases);
   const updatePhrase = usePhraseStore((state) => state.updatePhrase);
   const categories = useCategoryStore((state) => state.categories);
@@ -37,7 +35,9 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({
   };
 
   if (phrases.length === 0) {
-    return (<EmptyCard message="No se encontraron frases que coincidan con tu búsqueda." />);
+    return (
+      <EmptyCard message="No se encontraron frases que coincidan con tu búsqueda." />
+    );
   }
 
   return (
@@ -53,15 +53,12 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({
               <Badge variant="secondary" className="mb-2">
                 {getCategoryName(phrase.categoryId)}
               </Badge>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+              <ButtonCard
+                className="text-destructive"
+                ariaLabel="Eliminar frase"
+                icon={<Trash2 className="w-4 h-4" />}
                 onClick={() => deletePhrase(phrase.id)}
-                aria-label="Eliminar frase"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              />
             </div>
             <CardTitle className="text-base">{phrase.description}</CardTitle>
           </CardHeader>
@@ -69,22 +66,21 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({
             <p className="text-sm text-muted-foreground">
               {getFormattedDate(phrase.date)}
             </p>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => toggleFavorite(phrase)}
-              aria-label={
+            <ButtonCard
+              ariaLabel={
                 phrase.isFavorite
                   ? "Quitar de favoritas"
                   : "Marcar como favorita"
               }
-            >
-              {phrase.isFavorite ? (
-                <HeartFilledIcon className="w-4 h-4 text-red-500" />
-              ) : (
-                <Heart className="w-4 h-4 text-muted-foreground" />
-              )}
-            </Button>
+              icon={
+                phrase.isFavorite ? (
+                  <HeartFilledIcon className="w-4 h-4 text-red-500" />
+                ) : (
+                  <Heart className="w-4 h-4 text-muted-foreground" />
+                )
+              }
+              onClick={() => toggleFavorite(phrase)}
+            />
           </CardContent>
         </Card>
       ))}
