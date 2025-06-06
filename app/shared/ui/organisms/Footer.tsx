@@ -4,7 +4,7 @@ const readmeUrl = `${import.meta.env.VITE_GITHUB_URL}/phrases-grid/blob/main/REA
 
 export default function Footer() {
   return (
-    <footer className="fixed border-t text-sm text-center text-gray-500 bottom-0 w-full pb-4 pt-4">
+    <footer className="fixed border-t text-sm text-center text-gray-500 bottom-0 w-full bg-white pb-4 pt-4 z-50">
       <p>
         Interbanking Challenge by <strong>{import.meta.env.VITE_AUTHOR_NAME}</strong> —{" "}
         <a

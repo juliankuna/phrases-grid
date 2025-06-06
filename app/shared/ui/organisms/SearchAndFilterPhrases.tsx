@@ -25,8 +25,7 @@ const SearchAndFilterPhrases: React.FC = () => {
   } = useFiltersStore();
 
   return (
-    <Searcher title="Buscar y Filtrar">
-      {/* Barra de búsqueda */}
+    <Searcher title="Buscar y filtrar">
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
         <Input
@@ -39,7 +38,6 @@ const SearchAndFilterPhrases: React.FC = () => {
 
       {/* Filtros */}
       <div className="flex flex-col sm:flex-row gap-4">
-        {/* Filtro por categoría */}
         <div className="flex-1">
           <Label htmlFor="category-filter" className="text-sm font-medium">
             Categoría
