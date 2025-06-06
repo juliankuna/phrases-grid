@@ -5,22 +5,21 @@ import { Button } from "@atoms/button";
 import { Heart, Trash2 } from "lucide-react";
 import { HeartFilledIcon } from "@atoms/HeartFilledIcon";
 import { Phrase } from "~/shared/types/Phrase";
-import { Category } from "~/shared/types/Category";
 import { usePhraseStore } from "@store/phraseStore";
 import { getFormattedDate } from "~/shared/lib/getFormatedDate";
 import EmptyCard from "../molecules/EmptyCard";
+import { useCategoryStore } from "~/shared/store/categoryStore";
 
 interface PhrasesGridProps {
   phrases: Phrase[];
-  categories: Category[];
 }
 
 const PhrasesGrid: React.FC<PhrasesGridProps> = ({
   phrases,
-  categories,
 }) => {
   const setPhrases = usePhraseStore((state) => state.setPhrases);
   const updatePhrase = usePhraseStore((state) => state.updatePhrase);
+  const categories = useCategoryStore((state) => state.categories);
 
   const getCategoryName = (categoryId: number): string => {
     return (

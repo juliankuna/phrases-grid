@@ -17,7 +17,6 @@ import {
   SelectItem,
 } from "@atoms/select";
 import { Button } from "@atoms/button";
-import { Category } from "~/shared/types/Category";
 import { Phrase } from "~/shared/types/Phrase";
 import { usePhraseStore } from "@store/phraseStore";
 import { useCategoryStore } from "@store/categoryStore";
