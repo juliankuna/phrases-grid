@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import "./app.css";
+import AppLayout from "./Layout";
 
 const queryClient = new QueryClient();
 
@@ -46,10 +47,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  //  return <Outlet />;
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <AppLayout>
+        <Outlet />
+      </AppLayout>
     </QueryClientProvider>
   );
 }

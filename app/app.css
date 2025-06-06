@@ -17,6 +17,10 @@ body {
   }
 }
 
+.shadow-highlighted {
+  box-shadow: 0 0 16px 0 #357edd;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
