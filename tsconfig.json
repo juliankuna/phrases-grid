@@ -20,6 +20,8 @@
       "@atoms/*": ["app/shared/ui/atoms/*"],
       "@molecules/*": ["app/shared/ui/molecules/*"],
       "@organisms/*": ["app/shared/ui/organisms/*"],
+      "@store/*": ["app/shared/store/*"],
+      "@hooks/*": ["app/shared/hooks/*"],
     },
     "esModuleInterop": true,
     "verbatimModuleSyntax": false,

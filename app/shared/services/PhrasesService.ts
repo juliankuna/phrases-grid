@@ -5,7 +5,6 @@ export const PhrasesService = {
 
     async getPhrases(): Promise<Phrase[]> {
         try {
-        console.log("trolo ", axiosInstance.defaults.baseURL);
         const response = await axiosInstance.get<Phrase[]>('/phrases');
         return response.data;
         } catch (error) {
