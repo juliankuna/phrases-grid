@@ -7,24 +7,28 @@ import { useCategoryStore } from "@store/categoryStore";
 export function useInitializeData() {
   const { getCategoriesQuery } = useGetCategories();
   const { getPhrasesQuery } = useGetPhrases();
+
+  const phrases = usePhraseStore((state) => state.phrases);
   const setPhrases = usePhraseStore((state) => state.setPhrases);
+
+  const categories = useCategoryStore((state) => state.categories);
   const setCategories = useCategoryStore((state) => state.setCategories);
 
   useEffect(() => {
-    if (getPhrasesQuery.data) {
+    if (getPhrasesQuery.data && phrases.length === 0) {
       const phrasesWithDate = getPhrasesQuery.data.map((phrase) => ({
         ...phrase,
         date: new Date(phrase.date),
       }));
       setPhrases(phrasesWithDate);
     }
-  }, [getPhrasesQuery.data, setPhrases]);
+  }, [getPhrasesQuery.data, phrases.length, setPhrases]);
 
   useEffect(() => {
-    if (getCategoriesQuery.data) {
+    if (getCategoriesQuery.data && categories.length === 0) {
       setCategories(getCategoriesQuery.data);
     }
-  }, [getCategoriesQuery.data, setCategories]);
+  }, [getCategoriesQuery.data, categories.length, setCategories]);
 
   return {
     isLoading: getCategoriesQuery.isLoading || getPhrasesQuery.isLoading,
