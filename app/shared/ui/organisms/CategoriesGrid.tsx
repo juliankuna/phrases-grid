@@ -18,8 +18,8 @@ interface CategoriesGridProps {
 const CategoriesGrid: React.FC<CategoriesGridProps> = ({
   filteredCategories,
 }) => {
-  const setCategories = useCategoryStore((state) => state.setCategories);
   const updateCategory = useCategoryStore((state) => state.updateCategory);
+  const removeCategory = useCategoryStore((state) => state.removeCategory);
   const categories = useCategoryStore((state) => state.categories);
 
   // Mutaciones para actualizar y eliminar frases en el backend usando React Query
@@ -30,7 +30,7 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({
   const [editedName, setEditedName] = useState("");
 
   const deleteCategory = async (id: number) => {
-    setCategories(categories.filter((category) => category.id !== id));
+    removeCategory(id);
     await deleteCategoryMutation.mutateAsync(id);
   };
 

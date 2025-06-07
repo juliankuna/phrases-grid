@@ -17,18 +17,15 @@ import {
   SelectContent,
   SelectItem,
 } from "@atoms/select";
-import {
-  useDeletePhrase,
-  useUpdatePhrase,
-} from "@hooks/usePersistPhrase";
+import { useDeletePhrase, useUpdatePhrase } from "@hooks/usePersistPhrase";
 
 interface PhrasesGridProps {
   phrases: Phrase[];
 }
 
 const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
-  const setPhrases = usePhraseStore((state) => state.setPhrases);
   const updatePhrase = usePhraseStore((state) => state.updatePhrase);
+  const removePhrase = usePhraseStore((state) => state.removePhrase);
 
   // Mutaciones para actualizar y eliminar frases en el backend usando React Query
   const updatePhraseMutation = useUpdatePhrase();
@@ -48,7 +45,7 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
   };
 
   const deletePhrase = async (id: number) => {
-    setPhrases(phrases.filter((phrase) => phrase.id !== id));
+    removePhrase(id);
     await deletePhraseMutation.mutateAsync(id);
   };
 
@@ -84,7 +81,7 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
       description: editedDescription,
       categoryId: Number.parseInt(editedCategoryId),
     });
-    
+
     handleCancelEdit();
   };
 

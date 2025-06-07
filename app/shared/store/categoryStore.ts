@@ -7,6 +7,7 @@ interface CategoryState {
   addCategory: (category: Category) => void;
   clearCategories: () => void;
   updateCategory: (updatedCategory: Category) => void;
+  removeCategory: (id: number) => void;
 }
 
 export const useCategoryStore = create<CategoryState>((set) => ({
@@ -20,5 +21,9 @@ export const useCategoryStore = create<CategoryState>((set) => ({
       categories: state.categories.map((category) =>
         category.id === updatedCategory.id ? updatedCategory : category
       ),
+    })),
+  removeCategory: (id: number) =>
+    set((state) => ({
+      categories: state.categories.filter((c) => c.id !== id),
     })),
 }));

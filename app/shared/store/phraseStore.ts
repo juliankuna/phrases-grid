@@ -1,12 +1,13 @@
-import { create } from 'zustand'
-import { Phrase } from '../types/Phrase'
+import { create } from "zustand";
+import { Phrase } from "../types/Phrase";
 
 interface PhraseState {
-  phrases: Phrase[]
-  setPhrases: (phrases: Phrase[]) => void
-  addPhrase: (phrase: Phrase) => void
-  clearPhrases: () => void
-  updatePhrase: (updatedPhrase: Phrase) => void
+  phrases: Phrase[];
+  setPhrases: (phrases: Phrase[]) => void;
+  addPhrase: (phrase: Phrase) => void;
+  clearPhrases: () => void;
+  updatePhrase: (updatedPhrase: Phrase) => void;
+  removePhrase: (id: number) => void;
 }
 
 export const usePhraseStore = create<PhraseState>((set) => ({
@@ -21,4 +22,8 @@ export const usePhraseStore = create<PhraseState>((set) => ({
         phrase.id === updatedPhrase.id ? updatedPhrase : phrase
       ),
     })),
-}))
+  removePhrase: (id: number) =>
+    set((state) => ({
+      phrases: state.phrases.filter((p) => p.id !== id),
+    })),
+}));
