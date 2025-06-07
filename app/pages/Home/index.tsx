@@ -22,7 +22,7 @@ export function HomePage() {
   if (isLoading ) return <Loading />;
 
   return (
-    <div className="flex flex-col pb-8 pt-4">
+    <div className="flex flex-col">
       <main className="flex-grow container mx-auto p-6 max-w-6xl">
         <TopSection
           title="Tus frases"
