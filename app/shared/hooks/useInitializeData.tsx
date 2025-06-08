@@ -4,6 +4,11 @@ import { useGetPhrases } from "@hooks/useGetPhrases";
 import { usePhraseStore } from "@store/phraseStore";
 import { useCategoryStore } from "@store/categoryStore";
 
+/**
+ * Custom hook para inicializar datos desde el backend.
+ * Obtiene frases y categorías y actualiza las stores Zustand.
+ * @returns {Object} - Un objeto que contiene el estado de carga de los datos
+ */
 export function useInitializeData() {
   const { getCategoriesQuery } = useGetCategories();
   const { getPhrasesQuery } = useGetPhrases();
