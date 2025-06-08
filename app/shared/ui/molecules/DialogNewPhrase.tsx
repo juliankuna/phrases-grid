@@ -37,7 +37,7 @@ const DialogNewPhrase: React.FC<DialogNewPhraseProps> = ({
   const phrases = usePhraseStore((state) => state.phrases);
   const setPhrases = usePhraseStore((state) => state.setPhrases);
   const categories = useCategoryStore((state) => state.categories);
-  
+
   // Hook para crear una nueva frase en el backend
   const createPhraseMutation = useCreatePhrase();
 
@@ -51,9 +51,11 @@ const DialogNewPhrase: React.FC<DialogNewPhraseProps> = ({
         isFavorite: false,
       };
 
-      const phrase = await createPhraseMutation.mutateAsync(phraseWithoutId as Phrase);
+      const phrase = await createPhraseMutation.mutateAsync(
+        phraseWithoutId as Phrase
+      );
       setPhrases([...phrases, phrase]);
-      
+
       setNewPhrase("");
       setNewCategoryId("");
       setIsDialogOpen(false);
@@ -98,11 +100,16 @@ const DialogNewPhrase: React.FC<DialogNewPhraseProps> = ({
         </div>
         <DialogFooter>
           <Button
+            data-testid="submit-phrase"
             type="submit"
             onClick={addPhrase}
             disabled={!newPhrase.trim() || !newCategoryId}
           >
-            {createPhraseMutation.isPending ? <Loading color="white" /> : <>Agregar frase</>}
+            {createPhraseMutation.isPending ? (
+              <Loading color="white" />
+            ) : (
+              <>Agregar frase</>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
