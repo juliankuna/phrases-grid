@@ -38,7 +38,11 @@ describe("PhrasesService", () => {
       const error = new Error("Error");
       (axiosInstance.get as jest.Mock).mockRejectedValue(error);
 
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
       await expect(PhrasesService.getPhrases()).rejects.toThrow(error);
+      consoleSpy.mockRestore();
     });
   });
 
@@ -67,6 +71,9 @@ describe("PhrasesService", () => {
       const error = new Error("Error creando frase");
       (axiosInstance.post as jest.Mock).mockRejectedValue(error);
 
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
       await expect(
         PhrasesService.createPhrase({
           description: "Frase fallida",
@@ -75,6 +82,7 @@ describe("PhrasesService", () => {
           isFavorite: false,
         })
       ).rejects.toThrow(error);
+      consoleSpy.mockRestore();
     });
   });
 
@@ -93,9 +101,13 @@ describe("PhrasesService", () => {
       const error = new Error("Error actualizando");
       (axiosInstance.put as jest.Mock).mockRejectedValue(error);
 
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
       await expect(PhrasesService.updatePhrase(mockPhrase)).rejects.toThrow(
         error
       );
+      consoleSpy.mockRestore();
     });
   });
 
@@ -113,9 +125,13 @@ describe("PhrasesService", () => {
       const error = new Error("Error eliminando");
       (axiosInstance.delete as jest.Mock).mockRejectedValue(error);
 
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
       await expect(PhrasesService.deletePhrase(mockPhrase.id)).rejects.toThrow(
         error
       );
+      consoleSpy.mockRestore();
     });
   });
 });

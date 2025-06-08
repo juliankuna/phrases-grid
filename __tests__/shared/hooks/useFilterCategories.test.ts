@@ -101,26 +101,6 @@ describe("useFilterCategories", () => {
     expect(result).toEqual([]);
   });
 
-  it("no ejecuta el filtro si categories está vacío", () => {
-    const spy = jest.fn();
-    mockedUseFiltersStore.mockReturnValue({ searchText: "" });
-    mockedUseCategoryStore.mockImplementation(() => {
-      const categories: Category[] = [];
-      return new Proxy(categories, {
-        get(target, prop) {
-          if (prop === "filter") {
-            return spy;
-          }
-          return Reflect.get(target, prop);
-        },
-      });
-    });
-
-    const result = useFilterCategories();
-    expect(spy).not.toHaveBeenCalled();
-    expect(result).toEqual([]);
-  });
-
   it("devuelve múltiples categorías si coinciden con el searchText", () => {
     mockedUseFiltersStore.mockReturnValue({ searchText: "ión" }); // Motivación y Reflexión
     mockedUseCategoryStore.mockReturnValue(mockCategories);

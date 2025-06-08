@@ -1,4 +1,4 @@
-import { renderHook, act } from "@testing-library/react";
+import { renderHook, act, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useBatchMutation } from "~/shared/hooks/useBatchMutation";
 
@@ -21,10 +21,12 @@ describe("useBatchMutation", () => {
       await result.current.mutateAsync("input data");
     });
 
-    expect(mockActionFn).toHaveBeenCalledWith("input data");
-    expect(result.current.isSuccess).toBe(true);
-    expect(result.current.isPending).toBe(false);
-    expect(result.current.isError).toBe(false);
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+      expect(result.current.isPending).toBe(false);
+      expect(result.current.isError).toBe(false);
+      expect(mockActionFn).toHaveBeenCalledWith("input data");
+    });
   });
 
   it("maneja errores correctamente", async () => {
@@ -43,22 +45,25 @@ describe("useBatchMutation", () => {
       }
     });
 
-    expect(mockActionFn).toHaveBeenCalledWith("input fallido");
-    expect(result.current.isError).toBe(true);
-    expect(result.current.error).toEqual(error);
-    expect(result.current.isPending).toBe(false);
+    await waitFor(() => {
+      expect(mockActionFn).toHaveBeenCalledWith("input fallido");
+      expect(result.current.isError).toBe(true);
+      expect(result.current.error).toEqual(error);
+      expect(result.current.isPending).toBe(false);
+    });
   });
 
-  it("inicia en estado idle", () => {
+  it("inicia en estado idle", async () => {
     const mockActionFn = jest.fn();
 
     const { result } = renderHook(() => useBatchMutation(mockActionFn), {
       wrapper: createWrapper(),
     });
-
-    expect(result.current.isIdle).toBe(true);
-    expect(result.current.isPending).toBe(false);
-    expect(result.current.isError).toBe(false);
-    expect(result.current.isSuccess).toBe(false);
+    await waitFor(() => {
+      expect(result.current.isIdle).toBe(true);
+      expect(result.current.isPending).toBe(false);
+      expect(result.current.isError).toBe(false);
+      expect(result.current.isSuccess).toBe(false);
+    });
   });
 });

@@ -7,10 +7,18 @@ import { Phrase } from "~/shared/types/Phrase";
 jest.mock("~/shared/services/PhrasesService");
 
 const createWrapper = () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
+
   const wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
+
   return wrapper;
 };
 
@@ -19,15 +27,19 @@ describe("useGetPhrases", () => {
     jest.clearAllMocks();
   });
 
-  it("debe estar en estado loading inicialmente", () => {
-    // @ts-ignore
-    PhrasesService.getPhrases.mockImplementation(() => new Promise(() => {}));
+  it("debe estar en estado loading inicialmente", async () => {
+    // Mock para testear loading
+    (PhrasesService.getPhrases as jest.Mock).mockImplementation(
+      () => new Promise(() => {})
+    );
 
     const { result } = renderHook(() => useGetPhrases(), {
       wrapper: createWrapper(),
     });
 
-    expect(result.current.getPhrasesQuery.isLoading).toBe(true);
+    await waitFor(() => {
+      expect(result.current.getPhrasesQuery.isLoading).toBe(true);
+    });
   });
 
   it("debe devolver datos exitosamente", async () => {
@@ -48,32 +60,38 @@ describe("useGetPhrases", () => {
       },
     ];
 
-    // @ts-ignore
-    PhrasesService.getPhrases.mockResolvedValue(mockData);
+    (PhrasesService.getPhrases as jest.Mock).mockResolvedValue(mockData);
 
     const { result } = renderHook(() => useGetPhrases(), {
       wrapper: createWrapper(),
     });
 
-    await waitFor(() => result.current.getPhrasesQuery.isSuccess);
+    await waitFor(() => {
+      expect(result.current.getPhrasesQuery.isSuccess).toBe(true);
+    });
 
     expect(result.current.getPhrasesQuery.data).toEqual(mockData);
     expect(result.current.getPhrasesQuery.isLoading).toBe(false);
   });
 
   it("debe manejar errores correctamente", async () => {
-    const error = new Error("Error al obtener frases");
+    const errorMessage = "Error al obtener frases";
+    const error = new Error(errorMessage);
 
-    // @ts-ignore
-    PhrasesService.getPhrases.mockRejectedValue(error);
+    (PhrasesService.getPhrases as jest.Mock).mockRejectedValue(error);
 
     const { result } = renderHook(() => useGetPhrases(), {
       wrapper: createWrapper(),
     });
 
-    await waitFor(() => result.current.getPhrasesQuery.isError);
+    await waitFor(() => {
+      expect(result.current.getPhrasesQuery.isError).toBe(true);
+    });
 
-    expect(result.current.getPhrasesQuery.error).toBe(error);
+    const errorResult = result.current.getPhrasesQuery.error;
+
+    expect(errorResult).toBeInstanceOf(Error);
+    expect((errorResult as Error).message).toBe(errorMessage);
     expect(result.current.getPhrasesQuery.isLoading).toBe(false);
   });
 });

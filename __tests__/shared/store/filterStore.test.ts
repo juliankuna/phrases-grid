@@ -1,4 +1,4 @@
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { useFiltersStore } from "~/shared/store/filterStore";
 
 describe("useFiltersStore", () => {

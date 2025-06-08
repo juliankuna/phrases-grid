@@ -1,4 +1,4 @@
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 import { useCategoryStore } from "~/shared/store/categoryStore";
 import { Category } from "~/shared/types/Category";
 

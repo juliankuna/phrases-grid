@@ -21,6 +21,13 @@ describe("CategoriesService", () => {
     jest.clearAllMocks();
   });
 
+  beforeAll(() => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+  });
+  afterAll(() => {
+    (console.error as jest.Mock).mockRestore?.();
+  });
+
   describe("getCategories", () => {
     it("debe obtener categorías correctamente", async () => {
       const mockData = [mockCategory];
@@ -102,9 +109,15 @@ describe("CategoriesService", () => {
       const error = new Error("Error al eliminar categoría");
       (axiosInstance.delete as jest.Mock).mockRejectedValue(error);
 
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
       await expect(
         CategoriesService.deleteCategory(mockCategory.id)
       ).rejects.toThrow(error);
+
+      consoleSpy.mockRestore();
     });
   });
 });
