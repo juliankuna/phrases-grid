@@ -30,6 +30,7 @@ const DialogNewCategory: React.FC<DialogNewCategoryProps> = ({
   // Hook para crear una nueva categoría en el backend
   const createCategoryMutation = useCreateCategory();
 
+  // Guarda la nueva categoría tanto en la store como en el backend
   const addCategory = async () => {
     if (newCategoryName.trim()) {
       const newCategory: Omit<Category, "id"> = {

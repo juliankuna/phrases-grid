@@ -10,6 +10,10 @@ interface CategoryState {
   removeCategory: (id: number) => void;
 }
 
+/**
+ * Zustand store para gestionar el estado de las categorías.
+ * Proporciona métodos para añadir, actualizar, eliminar y limpiar categorías.
+ */
 export const useCategoryStore = create<CategoryState>((set) => ({
   categories: [],
   setCategories: (categories) => set({ categories }),

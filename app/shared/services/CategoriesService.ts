@@ -1,6 +1,11 @@
 import { Category } from "../types/Category"
 import { axiosInstance } from "./servicesConfig"
 
+/**
+ * Servicio para gestionar las categorías de frases.
+ * Proporciona métodos para obtener, actualizar, crear y eliminar categorías empleando 
+ * axios para realizar las peticiones HTTP al backend.
+ */
 export const CategoriesService = {
   async getCategories(): Promise<Category[]> {
     try {

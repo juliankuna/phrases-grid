@@ -1,6 +1,11 @@
 import { Phrase } from "../types/Phrase";
 import { axiosInstance } from "./servicesConfig";
 
+/**
+ * Servicio para gestionar las frases.
+ * Proporciona métodos para obtener, actualizar, crear y eliminar frases empleando 
+ * axios para realizar las peticiones HTTP al backend.
+ */
 export const PhrasesService = {
   async getPhrases(): Promise<Phrase[]> {
     try {

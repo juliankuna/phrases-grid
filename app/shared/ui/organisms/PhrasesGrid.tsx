@@ -49,6 +49,7 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
     await deletePhraseMutation.mutateAsync(id);
   };
 
+  // Marca o desmarca una frase como favorita y actualiza el estado en la store y en el backend
   const toggleFavorite = async (phrase: Phrase) => {
     updatePhrase({ ...phrase, isFavorite: !phrase.isFavorite });
     await updatePhraseMutation.mutateAsync({
@@ -69,6 +70,7 @@ const PhrasesGrid: React.FC<PhrasesGridProps> = ({ phrases }) => {
     setEditedCategoryId("");
   };
 
+  //Guarda la frase editada en el store y en el backend
   const handleSave = async (phrase: Phrase) => {
     updatePhrase({
       ...phrase,

@@ -41,7 +41,7 @@ const DialogNewPhrase: React.FC<DialogNewPhraseProps> = ({
   // Hook para crear una nueva frase en el backend
   const createPhraseMutation = useCreatePhrase();
 
-  // Función para agregar una nueva frase en el estado y en el backend
+  // Agrega una nueva frase en la store y en el backend
   const addPhrase = async () => {
     if (newPhrase.trim() && newCategoryId) {
       const phraseWithoutId: Omit<Phrase, "id"> = {

@@ -44,6 +44,7 @@ const CategoriesGrid: React.FC<CategoriesGridProps> = ({
     setEditedName("");
   };
 
+  //Guarda la categoría editada en el store y en el backend
   const handleSave = async (category: Category) => {
     updateCategory({ ...category, name: editedName });
     await updateCategoryMutation.mutateAsync({ ...category, name: editedName });

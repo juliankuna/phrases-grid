@@ -10,6 +10,10 @@ interface PhraseState {
   removePhrase: (id: number) => void;
 }
 
+/**
+ * Zustand store para gestionar el estado de las frases.
+ * Proporciona métodos para añadir, actualizar, eliminar y limpiar frases.
+ */
 export const usePhraseStore = create<PhraseState>((set) => ({
   phrases: [],
   setPhrases: (phrases) => set({ phrases }),
